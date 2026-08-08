@@ -1,0 +1,20 @@
+# Dependencias y cachés locales
+.pnpm-store/
+angular-app/node_modules/
+angular-app/.angular/
+
+# Archivos generados
+angular-app/dist/
+angular-app/coverage/
+*.log
+
+# Paquetes y documentos de entrega (no forman parte del código fuente)
+Digital-Waiter-Angular-*.zip
+entregables/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+

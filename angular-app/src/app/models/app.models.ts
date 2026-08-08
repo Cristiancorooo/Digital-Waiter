@@ -1,0 +1,11 @@
+export type Role='Administrador'|'Mesero'|'Cajero'|'Cocina';
+export type TableStatus='available'|'occupied'|'preparing'|'ready'|'payment';
+export type OrderStatus='new'|'preparing'|'ready'|'payment'|'paid';
+export interface Session{name:string;role:Role}
+export interface RestaurantTable{id:number;seats:number;status:TableStatus;orderId:number|null}
+export interface MenuItem{id:number;name:string;category:string;price:number;emoji:string;description:string;active:boolean;ingredient:string;use:number}
+export interface InventoryItem{id:number;name:string;category:string;unit:string;stock:number;min:number}
+export interface OrderLine{menuId:number;qty:number;note:string}
+export interface Order{id:number;table:number;status:OrderStatus;items:OrderLine[];createdAt:string;waiter:string;customer:string;notes:string}
+export interface Payment{id:number;orderId:number;total:number;items:OrderLine[];method:string;customer:string;date:string}
+export interface AppState{session:Session|null;tables:RestaurantTable[];menu:MenuItem[];inventory:InventoryItem[];orders:Order[];payments:Payment[];nextOrder:number;nextMenu:number;nextInventory:number}
