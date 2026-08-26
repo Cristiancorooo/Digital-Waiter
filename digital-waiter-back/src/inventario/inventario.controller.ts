@@ -1,0 +1,4 @@
+import { Body,Controller,Get,Param,ParseIntPipe,Patch,Post,Query } from '@nestjs/common'; import { IsNumber,IsPositive,IsString,Min } from 'class-validator'; import { InventarioService } from './inventario.service';
+class InventarioDto { @IsString() nombre:string; @IsString() unidad:string; @IsString() categoria:string; @IsNumber() @Min(0) stockActual:number; @IsNumber() @Min(0) stockMinimo:number }
+class MovimientoDto { @IsNumber() cantidad:number }
+@Controller('inventario') export class InventarioController {constructor(private service:InventarioService){} @Get() all(@Query('soloBajo') low?:string){return this.service.all(low==='true')} @Post() create(@Body() dto:InventarioDto){return this.service.create(dto)} @Patch(':id/stock') move(@Param('id',ParseIntPipe) id:number,@Body() dto:MovimientoDto){return this.service.move(id,dto.cantidad)} }

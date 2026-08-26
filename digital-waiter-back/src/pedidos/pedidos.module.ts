@@ -1,0 +1,2 @@
+import { Module } from '@nestjs/common'; import { TypeOrmModule } from '@nestjs/typeorm'; import { DetallePedido,Mesa,Pedido,Producto } from '../database/entities'; import { PedidosController } from './pedidos.controller'; import { PedidosService } from './pedidos.service';
+@Module({imports:[TypeOrmModule.forFeature([Pedido,DetallePedido,Mesa,Producto])],controllers:[PedidosController],providers:[PedidosService],exports:[PedidosService]}) export class PedidosModule {}

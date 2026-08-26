@@ -1,0 +1,4 @@
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common'; import { IsBoolean,IsNumber,IsOptional,IsPositive,IsString,MinLength } from 'class-validator'; import { ProductosService } from './productos.service';
+class ProductoDto { @IsString() @MinLength(2) nombre:string; @IsString() categoria:string; @IsNumber() @IsPositive() precio:number; @IsOptional() @IsString() descripcion?:string }
+class DisponibleDto { @IsBoolean() disponible:boolean }
+@Controller('productos') export class ProductosController {constructor(private service:ProductosService){} @Get() all(@Query('buscar') buscar='',@Query('categoria') categoria=''){return this.service.all(buscar,categoria)} @Post() create(@Body() dto:ProductoDto){return this.service.create(dto)} @Patch(':id/disponibilidad') toggle(@Param('id',ParseIntPipe) id:number,@Body() dto:DisponibleDto){return this.service.availability(id,dto.disponible)} }

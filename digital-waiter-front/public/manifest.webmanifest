@@ -1,0 +1,10 @@
+{
+  "name": "Digital Waiter",
+  "short_name": "Waiter",
+  "description": "Gestión inteligente para restaurantes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf8e9",
+  "theme_color": "#a70d16",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

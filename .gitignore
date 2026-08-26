@@ -1,12 +1,15 @@
 # Dependencias y cachés locales
 .pnpm-store/
-angular-app/node_modules/
-angular-app/.angular/
+**/node_modules/
+digital-waiter-front/.angular/
 
 # Archivos generados
-angular-app/dist/
-angular-app/coverage/
+**/dist/
+**/coverage/
 *.log
+.env
+!.env.example
+digital-waiter-front/android/
 
 # Paquetes y documentos de entrega (no forman parte del código fuente)
 Digital-Waiter-Angular-*.zip
@@ -17,4 +20,3 @@ entregables/
 Thumbs.db
 .idea/
 .vscode/
-
