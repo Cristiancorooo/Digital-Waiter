@@ -1,2 +1,3 @@
-import {inject} from '@angular/core';import {CanActivateFn,Router} from '@angular/router';import {StoreService} from '../services/store.service';
-export const authGuard:CanActivateFn=()=>inject(StoreService).session()?true:inject(Router).createUrlTree(['/login']);
+import {inject} from '@angular/core';import {CanActivateFn,Router} from '@angular/router';import {Role} from '../../models/app.models';import {StoreService} from '../services/store.service';
+export const authGuard:CanActivateFn=()=>inject(StoreService).session()&&localStorage.getItem('digitalWaiterToken')?true:inject(Router).createUrlTree(['/login']);
+export const roleGuard=(roles:Role[]):CanActivateFn=>()=>{const store=inject(StoreService),router=inject(Router),role=store.session()?.role as Role;return roles.includes(role)?true:router.createUrlTree([role==='Cocina'?'/cocina':'/inicio'])};

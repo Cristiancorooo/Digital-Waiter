@@ -25,31 +25,35 @@ Android ─┘
 
 El frontend nunca se conecta directamente a PostgreSQL. Toda lectura o modificación pasa por la API.
 
-## Estado actual de integración
+## Estado actual del producto
 
-- El inicio de sesión ya consume `POST /api/auth/login` y utiliza JWT.
-- La API y PostgreSQL ya ejecutan el flujo completo de mesas, pedidos, estados de cocina y pagos.
-- Las pantallas operativas de Angular conservan temporalmente su estado local de demostración. El siguiente sprint debe sustituir esas operaciones por llamadas a `ApiService`, módulo por módulo, sin cambiar la interfaz visual.
+- Todos los módulos operativos consumen la API y persisten sus datos en PostgreSQL.
+- Mesero, cocina, caja y administración comparten mesas, pedidos y estados mediante sincronización automática.
+- El flujo pedido → cocina → cobro → liberación de mesa está validado de extremo a extremo.
+- Los permisos se aplican en la interfaz y también en la API.
+- Administración puede crear usuarios, asignar roles, desactivar accesos y renovar contraseñas.
+- Menú, inventario, pagos y reportes trabajan con información centralizada.
+- El Asistente IA operativo analiza retrasos, ocupación, productos solicitados y stock para recomendar prioridades al administrador.
+- Las notificaciones por rol enlazan la secuencia Mesero → Cocina → Mesero → Caja mientras la aplicación está abierta.
+- El asistente por voz o texto permite registrar pedidos, actualizar Cocina, solicitar cobros y cobrar mediante instrucciones confirmadas por cada usuario.
+- La solución completa puede ejecutarse con Docker y la interfaz también puede empaquetarse como PWA o Android.
+
+Las recomendaciones actuales se calculan con reglas y datos reales del restaurante; no envían información a una IA externa. Los avisos aparecen dentro de la aplicación y pueden mostrarse como notificaciones del navegador al conceder permiso. Para recibir avisos con la aplicación completamente cerrada se debe añadir un servicio push como Firebase Cloud Messaging al desplegar el producto con HTTPS.
 
 ## Arranque con Docker
 
 Requisito: Docker Desktop.
 
 ```powershell
-docker compose up --build
+docker compose up -d --build
 ```
 
-Después, en otra terminal:
-
-```powershell
-cd digital-waiter-front
-pnpm install
-pnpm start
-```
-
-- Web: `http://localhost:4200`
+- Producto completo: `http://localhost:8099`
 - API: `http://localhost:3000/api`
+- Estado de la API: `http://localhost:3000/api/health`
 - PostgreSQL desde el computador: `localhost:55432` (dentro de Docker utiliza `5432`)
+
+Para un servidor real, copiar `.env.production.example` como `.env`, reemplazar ambos secretos y publicar el puerto web detrás de un dominio con HTTPS.
 
 ## Arranque sin Docker
 

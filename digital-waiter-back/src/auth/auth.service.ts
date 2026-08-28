@@ -21,6 +21,6 @@ export class AuthService implements OnModuleInit {
   async login(dto: { usuario: string; password: string; rol: string }) {
     const user = await this.users.findOneBy({ usuario: dto.usuario, activo: true });
     if (!user || user.rol !== dto.rol || !(await compare(dto.password, user.passwordHash))) throw new UnauthorizedException('Credenciales o rol incorrectos');
-    return { accessToken: await this.jwt.signAsync({ sub: user.id, role: user.rol }), user: { id: user.id, name: user.nombre, role: user.rol } };
+    return { accessToken: await this.jwt.signAsync({ sub: user.id, name: user.nombre, role: user.rol }), user: { id: user.id, name: user.nombre, role: user.rol } };
   }
 }

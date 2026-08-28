@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: digital_waiter
       POSTGRES_USER: digital_waiter
-      POSTGRES_PASSWORD: digital_waiter_dev
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-digital_waiter_dev}
     ports:
       - "55432:5432"
     volumes:
@@ -28,14 +28,24 @@ services:
       DB_PORT: 5432
       DB_NAME: digital_waiter
       DB_USER: digital_waiter
-      DB_PASSWORD: digital_waiter_dev
-      JWT_SECRET: change-this-secret-in-production
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-digital_waiter_dev}
+      DB_SYNC: "true"
+      JWT_SECRET: ${JWT_SECRET:-change-this-secret-in-production}
       CORS_ORIGIN: http://localhost:4200,http://127.0.0.1:4200
     ports:
       - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
+
+  frontend:
+    build: ./digital-waiter-front
+    container_name: digital-waiter-web
+    restart: unless-stopped
+    ports:
+      - "8099:80"
+    depends_on:
+      - backend
 
 volumes:
   digital_waiter_data:

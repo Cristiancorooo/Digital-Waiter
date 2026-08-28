@@ -1,5 +1,5 @@
 import {AppState} from '../models/app.models';
-export const SEED_STATE:AppState={session:null,tables:Array.from({length:12},(_,i)=>({id:i+1,seats:i%3===0?6:4,status:'available',orderId:null})),menu:[
+export const SEED_STATE:AppState={session:null,tables:Array.from({length:12},(_,i)=>({id:i+1,number:i+1,seats:i%3===0?6:4,status:'available',orderId:null})),menu:[
 {id:1,name:'Locro de papa',category:'Entradas',price:4.5,emoji:'🍲',description:'Aguacate, queso y ají de la casa',active:true,ingredient:'Papa chola',use:.35},
 {id:2,name:'Seco de pollo',category:'Platos fuertes',price:6.25,emoji:'🍗',description:'Arroz, maduro y ensalada',active:true,ingredient:'Pechuga de pollo',use:.25},
 {id:3,name:'Fritada completa',category:'Platos fuertes',price:7.5,emoji:'🥩',description:'Mote, tostado y maduro',active:true,ingredient:'Carne de cerdo',use:.3},

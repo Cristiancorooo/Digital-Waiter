@@ -37,7 +37,7 @@ import {Role} from '../../models/app.models';
     <label>Usuario<input formControlName="name" autocomplete="username"></label>
     <label>Contraseña<input formControlName="password" type="password" autocomplete="current-password"></label>
     @if(error()){<div class="form-error">Revisa el usuario, contraseña, rol o conexión con el servidor.</div>}
-    <button class="primary" type="submit" [disabled]="loading()">{{loading()?'Conectando…':'Ingresar al sistema →'}}</button><em>Demo: admin / 1234 / Administrador</em>
+    <button class="primary" type="submit" [disabled]="loading()">{{loading()?'Conectando…':'Ingresar al sistema →'}}</button>
    </form>
   </aside>
  </main>`

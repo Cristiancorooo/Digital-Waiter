@@ -10,6 +10,8 @@ import { PedidosModule } from './pedidos/pedidos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/access-control';
+import { HealthController } from './health.controller';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [
@@ -24,11 +26,12 @@ import { JwtAuthGuard } from './auth/access-control';
         password: config.get('DB_PASSWORD', 'digital_waiter_dev'),
         database: config.get('DB_NAME', 'digital_waiter'),
         entities: ENTITIES,
-        synchronize: config.get('NODE_ENV') !== 'production',
+        synchronize: config.get('DB_SYNC', config.get('NODE_ENV') !== 'production' ? 'true' : 'false') === 'true',
       }),
     }),
-    AuthModule, MesasModule, ProductosModule, InventarioModule, PedidosModule, PagosModule,
+    AuthModule, UsuariosModule, MesasModule, ProductosModule, InventarioModule, PedidosModule, PagosModule,
   ],
+  controllers: [HealthController],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}
