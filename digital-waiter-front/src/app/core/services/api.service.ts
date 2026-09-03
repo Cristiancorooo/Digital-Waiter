@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { Role } from '../../models/app.models';
 
 const defaultApiUrl = Capacitor.isNativePlatform()
-  ? 'http://10.0.2.2:3000/api'
+  ? 'http://192.168.1.13:8099/api'
   : location.port === '4200' ? 'http://localhost:3000/api' : `${location.origin}/api`;
 
 @Injectable({ providedIn: 'root' })
@@ -31,4 +31,7 @@ export class ApiService {
   estadoPedido(id: number, estado: string) { return firstValueFrom(this.http.patch(`${this.apiUrl}/pedidos/${id}/estado`, { estado })); }
   pagos() { return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/pagos`)); }
   pagar(pedidoId: number, metodo: string) { return firstValueFrom(this.http.post(`${this.apiUrl}/pagos`, { pedidoId, metodo })); }
+  restaurantePublico(){return firstValueFrom(this.http.get<any>(`${this.apiUrl}/publico/restaurante`));}
+  crearPedidoPublico(body:unknown){return firstValueFrom(this.http.post<any>(`${this.apiUrl}/publico/pedidos`,body));}
+  seguirPedidoPublico(code:string){return firstValueFrom(this.http.get<any>(`${this.apiUrl}/publico/pedidos/${encodeURIComponent(code)}`));}
 }

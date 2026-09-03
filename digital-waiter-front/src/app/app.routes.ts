@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';import {authGuard,roleGuard} from './core/guards/auth.guard';
 export const routes:Routes=[
+ {path:'cliente',loadComponent:()=>import('./features/cliente/cliente.component').then(m=>m.ClienteComponent)},
  {path:'login',loadComponent:()=>import('./features/autenticacion/inicio-sesion.component').then(m=>m.InicioSesionComponent)},
  {path:'',canActivate:[authGuard],loadComponent:()=>import('./layout/shell/shell.component').then(m=>m.ShellComponent),children:[
   {path:'inicio',canActivate:[roleGuard(['Administrador','Mesero','Cajero'])],loadComponent:()=>import('./features/dashboard/dashboard.component').then(m=>m.DashboardComponent)},
@@ -12,4 +13,5 @@ export const routes:Routes=[
   {path:'asistente',canActivate:[roleGuard(['Administrador'])],loadComponent:()=>import('./features/asistente/asistente.component').then(m=>m.AsistenteComponent)},
   {path:'reportes',canActivate:[roleGuard(['Administrador','Cajero'])],loadComponent:()=>import('./features/reportes/reportes.component').then(m=>m.ReportesComponent)},
   {path:'',pathMatch:'full',redirectTo:'inicio'}]},
- {path:'**',redirectTo:'login'}];
+ {path:'',pathMatch:'full',redirectTo:'cliente'},
+ {path:'**',redirectTo:'cliente'}];

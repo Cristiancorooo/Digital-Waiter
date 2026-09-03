@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/access-control';
 import { HealthController } from './health.controller';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { PublicoModule } from './publico/publico.module';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
         synchronize: config.get('DB_SYNC', config.get('NODE_ENV') !== 'production' ? 'true' : 'false') === 'true',
       }),
     }),
-    AuthModule, UsuariosModule, MesasModule, ProductosModule, InventarioModule, PedidosModule, PagosModule,
+    AuthModule, UsuariosModule, MesasModule, ProductosModule, InventarioModule, PedidosModule, PagosModule, PublicoModule,
   ],
   controllers: [HealthController],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],

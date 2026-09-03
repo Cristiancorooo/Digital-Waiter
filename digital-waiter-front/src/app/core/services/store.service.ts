@@ -48,20 +48,21 @@ export class StoreService {
     for (const order of current) {
       const old = previous.find(item => item.id === order.id);
       if (!old && ['Administrador', 'Cocina'].includes(role)) {
-        this.notifications.push('Nuevo pedido', `Mesa ${order.table}: el pedido ya llegó a cocina.`, 'info', 'cocina');
+        this.notifications.push('Nuevo pedido', `${this.place(order)}: el pedido ya llegó a cocina.`, 'info', 'cocina');
         continue;
       }
       if (!old || old.status === order.status) continue;
       if (order.status === 'ready' && ['Administrador', 'Mesero'].includes(role))
-        this.notifications.push('Pedido listo', `Mesa ${order.table}: cocina terminó la orden.`, 'success', 'mesero');
+        this.notifications.push('Pedido listo', `${this.place(order)}: cocina terminó la orden.`, 'success', 'mesero');
       if (order.status === 'payment' && ['Administrador', 'Cajero'].includes(role))
-        this.notifications.push('Pendiente de cobro', `Mesa ${order.table}: caja puede registrar el pago.`, 'warning', 'cajero');
+        this.notifications.push('Pendiente de cobro', `${this.place(order)}: caja puede registrar el pago.`, 'warning', 'cajero');
       if (order.status === 'paid' && ['Administrador', 'Cajero', 'Mesero'].includes(role))
-        this.notifications.push('Pago confirmado', `Mesa ${order.table}: pago registrado y mesa liberada.`, 'success', 'mesero');
+        this.notifications.push('Pago confirmado', `${this.place(order)}: pago registrado.`, 'success', 'mesero');
     }
   }
-  private mapOrder(o: any): Order { return { id: o.id, table: o.mesa?.numero, tableId: o.mesa?.id, status: o.estado, items: (o.detalles || []).map((d: any) => ({ menuId: d.producto.id, qty: d.cantidad, note: '' })), createdAt: o.creadoEn, waiter: o.mesero, customer: o.cliente, notes: o.notas }; }
+  private mapOrder(o: any): Order { return { id: o.id, table: o.mesa?.numero ?? 0, tableId: o.mesa?.id ?? 0, status: o.estado, items: (o.detalles || []).map((d: any) => ({ menuId: d.producto.id, qty: d.cantidad, note: '' })), createdAt: o.creadoEn, waiter: o.mesero, customer: o.cliente, notes: o.notas, modality:o.modalidad, pickupCode:o.codigoRetiro, pickupTime:o.horaRetiro }; }
   total(order: Order | null) { return order?.items.reduce((sum, line) => sum + (this.menu().find(m => m.id === line.menuId)?.price || 0) * line.qty, 0) || 0; }
+  place(order:Order){return order.modality==='pickup'?`Retiro ${order.pickupCode||'#'+order.id}`:`Mesa ${order.table}`}
   orderForTable(id: number) { return this.orders().find(o => o.tableId === id && o.status !== 'paid'); }
   async createOrder(tableId: number, items: OrderLine[], notes = '') { return this.run(() => this.api.crearPedido(tableId, items.map(x => ({ productoId: x.menuId, cantidad: x.qty })), notes)); }
   async setStatus(orderId: number, status: OrderStatus) { return this.run(() => this.api.estadoPedido(orderId, status)); }

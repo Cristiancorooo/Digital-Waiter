@@ -1,6 +1,6 @@
 # Digital Waiter
 
-Sistema multiplataforma para la operación de restaurantes. La misma interfaz Angular se utiliza como aplicación web responsive, PWA instalable y base para Android mediante Capacitor.
+Plataforma gastronómica multiplataforma que conecta al cliente con el establecimiento. El cliente puede consultar la carta, pedir desde una mesa o anticipar un retiro; el personal recibe la misma orden en Cocina y Caja. La interfaz Angular funciona como web responsive, PWA instalable y base para Android mediante Capacitor.
 
 ## Estructura del repositorio
 
@@ -27,6 +27,10 @@ El frontend nunca se conecta directamente a PostgreSQL. Toda lectura o modificac
 
 ## Estado actual del producto
 
+- El inicio público móvil permite explorar el restaurante y su carta sin seleccionar roles técnicos ni iniciar sesión.
+- El cliente puede escanear un QR de mesa (con ingreso manual alternativo), crear un pedido para comer en el local o programar un retiro.
+- Cada pedido público se guarda en PostgreSQL y recibe un código de seguimiento no secuencial.
+- El seguimiento muestra Confirmado → Preparando → Listo → Por retirar → Completado.
 - Todos los módulos operativos consumen la API y persisten sus datos en PostgreSQL.
 - Mesero, cocina, caja y administración comparten mesas, pedidos y estados mediante sincronización automática.
 - El flujo pedido → cocina → cobro → liberación de mesa está validado de extremo a extremo.
@@ -36,6 +40,7 @@ El frontend nunca se conecta directamente a PostgreSQL. Toda lectura o modificac
 - El Asistente IA operativo analiza retrasos, ocupación, productos solicitados y stock para recomendar prioridades al administrador.
 - Las notificaciones por rol enlazan la secuencia Mesero → Cocina → Mesero → Caja mientras la aplicación está abierta.
 - El asistente por voz o texto permite registrar pedidos, actualizar Cocina, solicitar cobros y cobrar mediante instrucciones confirmadas por cada usuario.
+- La identidad incluye logo completo, icono móvil y pantalla splash en rojo vino, naranja y crema.
 - La solución completa puede ejecutarse con Docker y la interfaz también puede empaquetarse como PWA o Android.
 
 Las recomendaciones actuales se calculan con reglas y datos reales del restaurante; no envían información a una IA externa. Los avisos aparecen dentro de la aplicación y pueden mostrarse como notificaciones del navegador al conceder permiso. Para recibir avisos con la aplicación completamente cerrada se debe añadir un servicio push como Firebase Cloud Messaging al desplegar el producto con HTTPS.
@@ -48,7 +53,8 @@ Requisito: Docker Desktop.
 docker compose up -d --build
 ```
 
-- Producto completo: `http://localhost:8099`
+- Aplicación del cliente: `http://localhost:8099/cliente`
+- Acceso del establecimiento: `http://localhost:8099/login`
 - API: `http://localhost:3000/api`
 - Estado de la API: `http://localhost:3000/api/health`
 - PostgreSQL desde el computador: `localhost:55432` (dentro de Docker utiliza `5432`)
@@ -96,11 +102,29 @@ pnpm mobile:android
 
 En el emulador Android la API local utiliza `http://10.0.2.2:3000/api`. En un teléfono físico se debe configurar la dirección del computador, por ejemplo `http://192.168.1.20:3000/api`, y permitir ese origen en `CORS_ORIGIN`.
 
-## Flujo funcional objetivo
+## Flujos funcionales
 
 ```text
-Login → Dashboard → Mesas → Pedido → Cocina → Entrega → Pago → Mesa disponible
+Cliente en mesa: QR → Carta → Pedido → Cocina → Entrega → Caja
+Cliente anticipado: Carta → Retiro → Cocina → Aviso de listo → Caja
+Personal: Login → Dashboard → Mesas/Pedidos → Cocina → Pago
 ```
+
+## Alcance de demostración
+
+- La aplicación registra pagos en efectivo, tarjeta o transferencia, pero no procesa cobros bancarios en línea.
+- Las notificaciones sonoras y del navegador funcionan mientras la aplicación está abierta. Las alertas con la app cerrada requieren HTTPS y un servicio push como Firebase Cloud Messaging.
+- La detección automática de QR depende de la compatibilidad del navegador; siempre queda disponible el código manual, por ejemplo `MESA-4`.
+- El catálogo público presenta el establecimiento de demostración `Sazón de Casa`; la API quedó separada para incorporar más restaurantes posteriormente.
+
+## Identidad visual
+
+Los recursos definitivos están en `digital-waiter-front/public/`:
+
+- `digital-waiter-logo-v1.png`: logo completo.
+- `digital-waiter-logo-light.png`: versión clara para fondos rojo vino.
+- `digital-waiter-app-icon.png`: icono cuadrado para PWA y móvil.
+- `digital-waiter-splash.png`: pantalla de inicio móvil.
 
 ## Normas para el equipo
 

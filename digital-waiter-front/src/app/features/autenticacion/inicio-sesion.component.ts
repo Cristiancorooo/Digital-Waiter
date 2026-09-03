@@ -2,13 +2,14 @@ import {Component,inject,signal} from '@angular/core';
 import {FormBuilder,ReactiveFormsModule,Validators} from '@angular/forms';
 import {AuthService} from '../../core/services/auth.service';
 import {Role} from '../../models/app.models';
+import {RouterLink} from '@angular/router';
 
 @Component({
- selector:'app-inicio-sesion',standalone:true,imports:[ReactiveFormsModule],
+ selector:'app-inicio-sesion',standalone:true,imports:[ReactiveFormsModule,RouterLink],
  template:`
  <main class="login-experience" [class.form-visible]="showForm()">
   <section class="login-presentation">
-   <div class="brand login-logo"><span>⌁</span><b>DIGITAL <i>WAITER</i></b></div>
+   <a class="login-brand-image" routerLink="/cliente"><img src="/digital-waiter-logo-v1.png" alt="Digital Waiter"></a>
    <div class="presentation-copy">
     <div class="tables-art login-art" aria-label="Estados de las mesas">
      <i><small>Disponible</small>01</i><i><small>Ocupada</small>02</i>
@@ -23,7 +24,7 @@ import {Role} from '../../models/app.models';
    </div>
    @if(!showForm()){
     <button class="login-launch" [class.disintegrating]="disintegrating()" [class.regenerating]="regenerating()" (click)="openLogin()" [disabled]="disintegrating()">
-     <span class="launch-label">Iniciar sesión</span><span class="launch-arrow">→</span>
+     <span class="launch-label">Acceso del personal</span><span class="launch-arrow">→</span>
      <span class="particle p1"></span><span class="particle p2"></span><span class="particle p3"></span><span class="particle p4"></span><span class="particle p5"></span><span class="particle p6"></span>
     </button>
    }
@@ -32,7 +33,7 @@ import {Role} from '../../models/app.models';
   <aside class="login-panel" [attr.aria-hidden]="!showForm()">
    <button type="button" class="login-back" (click)="closeLogin()">← Volver</button>
    <form [formGroup]="form" (ngSubmit)="submit()">
-    <small>BIENVENIDO</small><h2>Iniciar sesión</h2><p>Selecciona tu rol e ingresa para comenzar.</p>
+    <small>ESTABLECIMIENTO</small><h2>Acceso del personal</h2><p>Selecciona tu rol e ingresa para gestionar la operación.</p><a class="customer-return" routerLink="/cliente">← Volver a la aplicación del cliente</a>
     <div class="roles">@for(role of roles;track role){<button type="button" [class.active]="form.value.role===role" (click)="form.patchValue({role})">{{role}}</button>}</div>
     <label>Usuario<input formControlName="name" autocomplete="username"></label>
     <label>Contraseña<input formControlName="password" type="password" autocomplete="current-password"></label>

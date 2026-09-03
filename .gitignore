@@ -9,7 +9,8 @@ digital-waiter-front/.angular/
 *.log
 .env
 !.env.example
-digital-waiter-front/android/
+*.apk
+*.aab
 
 # Paquetes y documentos de entrega (no forman parte del código fuente)
 Digital-Waiter-Angular-*.zip

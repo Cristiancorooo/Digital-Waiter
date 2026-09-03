@@ -52,10 +52,14 @@ export class Inventario {
 @Entity('pedidos')
 export class Pedido {
   @PrimaryGeneratedColumn() id: number;
-  @ManyToOne(() => Mesa, mesa => mesa.pedidos, { eager: true }) mesa: Mesa;
+  @ManyToOne(() => Mesa, mesa => mesa.pedidos, { eager: true, nullable: true }) mesa?: Mesa;
   @Column({ default: 'new' }) estado: EstadoPedido;
   @Column({ default: '' }) mesero: string;
   @Column({ default: '' }) cliente: string;
+  @Column({ default: '' }) telefono: string;
+  @Column({ default: 'dinein' }) modalidad: string;
+  @Column({ default: '' }) codigoRetiro: string;
+  @Column({ default: '' }) horaRetiro: string;
   @Column({ type: 'text', default: '' }) notas: string;
   @CreateDateColumn() creadoEn: Date;
   @OneToMany(() => DetallePedido, detalle => detalle.pedido, { cascade: true, eager: true }) detalles: DetallePedido[];
