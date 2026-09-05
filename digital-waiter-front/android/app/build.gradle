@@ -4,6 +4,21 @@ android {
     namespace "ec.edu.yavirac.digitalwaiter"
     compileSdk rootProject.ext.compileSdkVersion
     buildToolsVersion "36.1.0"
+    flavorDimensions "edition"
+    productFlavors {
+        client {
+            dimension "edition"
+            applicationId "ec.edu.yavirac.digitalwaiter.cliente"
+            resValue "string", "app_name", "Digital Waiter Cliente"
+            resValue "string", "title_activity_main", "Digital Waiter Cliente"
+        }
+        business {
+            dimension "edition"
+            applicationId "ec.edu.yavirac.digitalwaiter.negocios"
+            resValue "string", "app_name", "Digital Waiter Negocios"
+            resValue "string", "title_activity_main", "Digital Waiter Negocios"
+        }
+    }
     defaultConfig {
         applicationId "ec.edu.yavirac.digitalwaiter"
         minSdkVersion rootProject.ext.minSdkVersion

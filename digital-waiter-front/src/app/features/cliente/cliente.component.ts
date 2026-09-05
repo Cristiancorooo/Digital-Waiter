@@ -1,16 +1,15 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, OnDestroy, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 
 type CustomerTab='home'|'explore'|'orders'|'profile';
 interface PublicDish{id:number;nombre:string;descripcion:string;precio:number;disponible:boolean;categoria?:{nombre:string}}
 
-@Component({selector:'app-cliente',standalone:true,imports:[FormsModule,CurrencyPipe,RouterLink],template:`
+@Component({selector:'app-cliente',standalone:true,imports:[FormsModule,CurrencyPipe],template:`
 @if(splash()){<div class="customer-splash"><img src="/digital-waiter-splash.png" alt="Digital Waiter"></div>}
 <main class="customer-app">
- <header class="customer-header"><img src="/digital-waiter-logo-v1.png" alt="Digital Waiter"><button routerLink="/login">Establecimiento</button></header>
+ <header class="customer-header"><img src="/digital-waiter-logo-v1.png" alt="Digital Waiter"><span>Ordena fácil · disfruta más</span></header>
  <div class="customer-content">
  @if(tab()==='home'){
   <section class="customer-greeting"><small>HOLA{{customerName?', '+customerName.toUpperCase():''}} 👋</small><h1>¿Qué deseas comer hoy?</h1><label class="customer-search">⌕ <input [(ngModel)]="search" (focus)="tab.set('explore')" placeholder="Buscar restaurante o plato"></label></section>
@@ -32,7 +31,7 @@ interface PublicDish{id:number;nombre:string;descripcion:string;precio:number;di
   @if(currentOrder();as order){<article class="tracking-card"><div class="tracking-code"><small>CÓDIGO</small><b>{{order.codigoRetiro}}</b></div><h2>{{statusLabel(order.estado)}}</h2><p>{{order.modalidad==='pickup'?'Te avisaremos cuando puedas retirar tu pedido.':'Tu pedido llegará a la mesa '+order.mesa?.numero+'.'}}</p><div class="tracking-steps">@for(step of steps;track step.value;let i=$index){<div [class.done]="statusIndex(order.estado)>=i"><i>{{statusIndex(order.estado)>i?'✓':i+1}}</i><span>{{step.label}}</span></div>}</div><div class="tracking-summary">@for(line of order.detalles;track line.id){<span>{{line.cantidad}} × {{line.producto.nombre}}</span>}</div><button class="small-button wide" (click)="refreshOrder()">↻ Actualizar estado</button></article>}@else{<section class="customer-empty"><span>🧾</span><h2>Aún no tienes pedidos</h2><p>Explora la carta y realiza tu primera orden.</p><button class="primary" (click)="tab.set('explore')">Ver carta</button></section>}
  }
  @if(tab()==='profile'){
-  <section class="catalog-head"><button (click)="tab.set('home')">←</button><div><small>CUENTA</small><h1>Tu perfil</h1></div></section><section class="profile-card"><div class="profile-avatar">{{customerName?customerName[0].toUpperCase():'C'}}</div><label>Nombre<input [(ngModel)]="customerName" placeholder="Tu nombre"></label><label>Teléfono<input [(ngModel)]="phone" inputmode="tel" placeholder="09 9999 9999"></label><button class="primary wide" (click)="saveProfile()">Guardar datos</button><button class="staff-access" routerLink="/login">Acceso para el establecimiento →</button></section>
+  <section class="catalog-head"><button (click)="tab.set('home')">←</button><div><small>CUENTA</small><h1>Tu perfil</h1></div></section><section class="profile-card"><div class="profile-avatar">{{customerName?customerName[0].toUpperCase():'C'}}</div><label>Nombre<input [(ngModel)]="customerName" placeholder="Tu nombre"></label><label>Teléfono<input [(ngModel)]="phone" inputmode="tel" placeholder="09 9999 9999"></label><button class="primary wide" (click)="saveProfile()">Guardar datos</button></section>
  }
  </div>
  @if(cartCount()){<button class="cart-bar" (click)="checkoutOpen.set(true)"><span>{{cartCount()}} producto(s)</span><b>Ver pedido · {{cartTotal()|currency:'USD'}}</b></button>}

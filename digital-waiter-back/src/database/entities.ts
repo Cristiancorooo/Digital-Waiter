@@ -1,7 +1,18 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 
 export type EstadoMesa = 'available' | 'occupied' | 'preparing' | 'ready' | 'payment';
 export type EstadoPedido = 'new' | 'preparing' | 'ready' | 'payment' | 'paid';
+
+@Entity('restaurantes')
+export class Restaurante {
+  @PrimaryGeneratedColumn() id: number;
+  @Column() nombre: string;
+  @Column({ unique: true }) slug: string;
+  @Column({ default: '' }) ciudad: string;
+  @Column({ default: '' }) direccion: string;
+  @Column({ default: '' }) telefono: string;
+  @Column({ default: true }) activo: boolean;
+}
 
 @Entity('usuarios')
 export class Usuario {
@@ -11,22 +22,27 @@ export class Usuario {
   @Column() passwordHash: string;
   @Column({ default: 'Mesero' }) rol: string;
   @Column({ default: true }) activo: boolean;
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
 @Entity('mesas')
+@Index(['restauranteId', 'numero'], { unique: true })
 export class Mesa {
   @PrimaryGeneratedColumn() id: number;
-  @Column({ unique: true }) numero: number;
+  @Column() numero: number;
   @Column({ default: 4 }) capacidad: number;
   @Column({ default: 'available' }) estado: EstadoMesa;
   @OneToMany(() => Pedido, pedido => pedido.mesa) pedidos: Pedido[];
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
 @Entity('categorias')
+@Index(['restauranteId', 'nombre'], { unique: true })
 export class Categoria {
   @PrimaryGeneratedColumn() id: number;
-  @Column({ unique: true }) nombre: string;
+  @Column() nombre: string;
   @OneToMany(() => Producto, producto => producto.categoria) productos: Producto[];
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
 @Entity('productos')
@@ -37,6 +53,7 @@ export class Producto {
   @Column({ type: 'decimal', precision: 10, scale: 2 }) precio: number;
   @Column({ default: true }) disponible: boolean;
   @ManyToOne(() => Categoria, categoria => categoria.productos, { eager: true }) categoria: Categoria;
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
 @Entity('inventario')
@@ -47,6 +64,7 @@ export class Inventario {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 }) stockActual: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 }) stockMinimo: number;
   @Column({ default: '' }) categoria: string;
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
 @Entity('pedidos')
@@ -64,6 +82,7 @@ export class Pedido {
   @CreateDateColumn() creadoEn: Date;
   @OneToMany(() => DetallePedido, detalle => detalle.pedido, { cascade: true, eager: true }) detalles: DetallePedido[];
   @OneToOne(() => Pago, pago => pago.pedido) pago?: Relation<Pago>;
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
 @Entity('detalles_pedido')
@@ -83,6 +102,7 @@ export class Pago {
   @Column({ type: 'decimal', precision: 10, scale: 2 }) monto: number;
   @Column() metodo: string;
   @CreateDateColumn() pagadoEn: Date;
+  @Column({ nullable: true }) restauranteId?: number;
 }
 
-export const ENTITIES = [Usuario, Mesa, Categoria, Producto, Inventario, Pedido, DetallePedido, Pago];
+export const ENTITIES = [Restaurante, Usuario, Mesa, Categoria, Producto, Inventario, Pedido, DetallePedido, Pago];

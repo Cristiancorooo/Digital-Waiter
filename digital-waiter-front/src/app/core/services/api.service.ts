@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { firstValueFrom } from 'rxjs';
-import { Role } from '../../models/app.models';
 
 const defaultApiUrl = Capacitor.isNativePlatform()
   ? 'http://192.168.1.13:8099/api'
@@ -12,7 +11,8 @@ const defaultApiUrl = Capacitor.isNativePlatform()
 export class ApiService {
   constructor(private readonly http: HttpClient) {}
   private get apiUrl() { return localStorage.getItem('digitalWaiterApiUrl') ?? defaultApiUrl; }
-  login(usuario: string, password: string, rol: Role) { return firstValueFrom(this.http.post<any>(`${this.apiUrl}/auth/login`, { usuario, password, rol })); }
+  login(usuario: string, password: string) { return firstValueFrom(this.http.post<any>(`${this.apiUrl}/auth/login`, { usuario, password })); }
+  registrarRestaurante(body: unknown) { return firstValueFrom(this.http.post<any>(`${this.apiUrl}/auth/registrar-restaurante`, body)); }
   usuarios() { return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/usuarios`)); }
   crearUsuario(body: unknown) { return firstValueFrom(this.http.post(`${this.apiUrl}/usuarios`, body)); }
   activarUsuario(id: number, activo: boolean) { return firstValueFrom(this.http.patch(`${this.apiUrl}/usuarios/${id}/activo`, { activo })); }

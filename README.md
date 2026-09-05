@@ -54,7 +54,7 @@ docker compose up -d --build
 ```
 
 - Aplicación del cliente: `http://localhost:8099/cliente`
-- Acceso del establecimiento: `http://localhost:8099/login`
+- Acceso del establecimiento: `http://localhost:8099/establecimiento`
 - API: `http://localhost:3000/api`
 - Estado de la API: `http://localhost:3000/api/health`
 - PostgreSQL desde el computador: `localhost:55432` (dentro de Docker utiliza `5432`)
@@ -101,6 +101,13 @@ pnpm mobile:android
 ```
 
 En el emulador Android la API local utiliza `http://10.0.2.2:3000/api`. En un teléfono físico se debe configurar la dirección del computador, por ejemplo `http://192.168.1.20:3000/api`, y permitir ese origen en `CORS_ORIGIN`.
+
+El proyecto también dispone de dos ediciones Android independientes:
+
+- `Digital-Waiter-Cliente.apk`: experiencia exclusiva de carta, QR, carrito, pedido y seguimiento.
+- `Digital-Waiter-Negocios.apk`: acceso exclusivo del establecimiento y módulos por rol.
+
+Los paquetes Android son distintos (`ec.edu.yavirac.digitalwaiter.cliente` y `ec.edu.yavirac.digitalwaiter.negocios`), por lo que pueden instalarse simultáneamente en el mismo teléfono.
 
 ## Flujos funcionales
 

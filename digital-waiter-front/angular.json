@@ -48,6 +48,24 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "client": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app-edition.ts",
+                  "with": "src/app/app-edition.client.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "business": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app-edition.ts",
+                  "with": "src/app/app-edition.business.ts"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"

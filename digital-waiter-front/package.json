@@ -8,7 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "mobile:sync": "ng build && cap sync",
-    "mobile:android": "ng build && cap sync android && cap open android"
+    "mobile:android": "ng build && cap sync android && cap open android",
+    "build:client": "ng build --configuration client",
+    "build:business": "ng build --configuration business"
   },
   "prettier": {
     "printWidth": 100,
