@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/.angular
+**/coverage
+digital-waiter-front/android
+.git
+.pnpm-store
+.codex-video-review
+respaldo-word
+*.apk
+*.aab
+*.zip
+*.docx
+*.pdf

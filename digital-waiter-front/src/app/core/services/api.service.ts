@@ -4,7 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { firstValueFrom } from 'rxjs';
 
 const defaultApiUrl = Capacitor.isNativePlatform()
-  ? 'http://192.168.1.13:8099/api'
+  ? 'https://digital-waiter-cristian.onrender.com/api'
   : location.port === '4200' ? 'http://localhost:3000/api' : `${location.origin}/api`;
 
 @Injectable({ providedIn: 'root' })

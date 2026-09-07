@@ -1,0 +1,26 @@
+FROM node:22-alpine AS frontend-build
+WORKDIR /frontend
+RUN corepack enable
+COPY digital-waiter-front/package.json digital-waiter-front/pnpm-lock.yaml digital-waiter-front/pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY digital-waiter-front/ ./
+RUN pnpm build
+
+FROM node:22-alpine AS backend-build
+WORKDIR /backend
+RUN corepack enable
+COPY digital-waiter-back/package.json digital-waiter-back/pnpm-lock.yaml digital-waiter-back/pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY digital-waiter-back/ ./
+RUN pnpm build
+
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+RUN corepack enable
+COPY digital-waiter-back/package.json digital-waiter-back/pnpm-lock.yaml digital-waiter-back/pnpm-workspace.yaml ./
+RUN pnpm install --prod --frozen-lockfile
+COPY --from=backend-build /backend/dist ./dist
+COPY --from=frontend-build /frontend/dist/digital-waiter-front/browser ./public
+EXPOSE 10000
+CMD ["node", "dist/main.js"]
